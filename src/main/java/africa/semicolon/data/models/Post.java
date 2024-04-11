@@ -14,7 +14,7 @@ import java.util.List;
 public class Post {
     @Id
     private String id;
-    private String poster;
+    private String author;
     private String title;
     private String content;
     private LocalDateTime dateCreated = LocalDateTime.now();
