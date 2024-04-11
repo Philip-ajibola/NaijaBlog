@@ -2,7 +2,6 @@ package africa.semicolon.services;
 
 import africa.semicolon.data.models.Comment;
 import africa.semicolon.data.models.Post;
-import africa.semicolon.data.models.User;
 import africa.semicolon.data.models.View;
 import africa.semicolon.data.repositories.PostRepository;
 import africa.semicolon.dto.requests.CommentPostRequest;
@@ -11,8 +10,6 @@ import africa.semicolon.dto.requests.ViewPostRequest;
 import africa.semicolon.exceptions.PostNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class PostServicesImpl implements PostServices {
@@ -40,15 +37,15 @@ public class PostServicesImpl implements PostServices {
     }
 
     @Override
-    public Post findPostByTitleAndPoster(String title, String username) {
-        Post post = postRepository.findByTitleAndPoster(title, username);
+    public Post findPostByTitleAndAuthor(String title, String username) {
+        Post post = postRepository.findByTitleAndAuthor(title, username);
         if (post == null) throw new PostNotFoundException("Post not found");
         return post;
     }
 
     @Override
     public void addView(ViewPostRequest viewPostRequest) {
-        Post post = findPostByTitleAndPoster(viewPostRequest.getPostTitle(), viewPostRequest.getPosterName());
+        Post post = findPostByTitleAndAuthor(viewPostRequest.getPostTitle(), viewPostRequest.getPosterName());
         View view = viewServices.saveView(viewPostRequest);
         post.getViews().add(view);
         postRepository.save(post);
@@ -56,7 +53,7 @@ public class PostServicesImpl implements PostServices {
 
     @Override
     public void addComment(CommentPostRequest commentPostRequest) {
-        Post post = findPostByTitleAndPoster(commentPostRequest.getPostTitle(), commentPostRequest.getPoster());
+        Post post = findPostByTitleAndAuthor(commentPostRequest.getPostTitle(), commentPostRequest.getPoster());
         Comment comment = commentServices.saveComment(commentPostRequest);
         post.getComments().add(comment);
         postRepository.save(post);
@@ -64,7 +61,7 @@ public class PostServicesImpl implements PostServices {
 
     @Override
     public void deleteComment(DeleteCommentRequest deleteCommentRequest) {
-        Post post = findPostByTitleAndPoster(deleteCommentRequest.getPostTitle(), deleteCommentRequest.getPoster());
+        Post post = findPostByTitleAndAuthor(deleteCommentRequest.getPostTitle(), deleteCommentRequest.getPoster());
         Comment comment = commentServices.removeComment(deleteCommentRequest);
         post.getComments().remove(comment);
         postRepository.save(post);
