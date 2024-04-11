@@ -5,10 +5,7 @@ import africa.semicolon.data.models.User;
 import africa.semicolon.data.repositories.UserRepository;
 import africa.semicolon.dto.requests.*;
 import africa.semicolon.dto.responses.*;
-import africa.semicolon.exceptions.InvalidPasswordException;
-import africa.semicolon.exceptions.UserAlreadyExistException;
-import africa.semicolon.exceptions.UserNotFoundException;
-import africa.semicolon.exceptions.UserNotLoggedInException;
+import africa.semicolon.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +40,7 @@ public class UserServicesImpl implements UserServices{
 
     @Override
         public CreatePostResponse createPost(CreatePostRequest createPostRequest) {
+            validateRequest(createPostRequest);
             User foundUser = findUserByName(createPostRequest.getAuthor());
             validateLogin(foundUser);
             Post post = requestMap(createPostRequest);
@@ -52,6 +50,12 @@ public class UserServicesImpl implements UserServices{
             return createPostResponseMap(post);
         }
 
+    private void validateRequest(CreatePostRequest createPostRequest) {
+        if(createPostRequest.getAuthor().isEmpty())throw new PostAuthorException("Provide The Poster Name");
+        if(createPostRequest.getTitle().isEmpty())throw new PostTitleException("PostTitle Must Not Be Empty");
+        if(createPostRequest.getContent().isEmpty())throw new PostContentException("Post Content Must Not Be Empty");
+    }
+
     private  void validateLogin(User foundUser) {
         if(!foundUser.isLoggedIn()) throw new UserNotLoggedInException("You need to log in to create post");
     }
@@ -60,7 +64,7 @@ public class UserServicesImpl implements UserServices{
         public DeletePostResponse deletePost(DeletePostRequest deletePostRequest) {
             User foundUser = findUserByName(deletePostRequest.getAuthor());
             validateLogin(foundUser);
-            Post post = postServices.findPostByTitleAndPoster(deletePostRequest.getPostTitle(),deletePostRequest.getPoster());
+            Post post = postServices.findPostByTitleAndAuthor(deletePostRequest.getPostTitle(),deletePostRequest.getAuthor());
             postServices.deletePost(post);
             foundUser.getPosts().remove(post);
             userRepository.save(foundUser);
@@ -82,7 +86,7 @@ public class UserServicesImpl implements UserServices{
     }
 
     @Override
-    public void addComment(CommentPostRequest commentPostRequest) {
+    public void comment(CommentPostRequest commentPostRequest) {
         validateLogin(findUserByName(commentPostRequest.getCommenter()));
         postServices.addComment(commentPostRequest);
     }
