@@ -24,6 +24,7 @@ public class Mapper {
     public static Post requestMap(CreatePostRequest createPostRequest){
         Post post = new Post();
         post.setTitle(createPostRequest.getTitle());
+        post.setAuthor(createPostRequest.getAuthor());
         post.setContent(createPostRequest.getContent());
         return post;
     }
