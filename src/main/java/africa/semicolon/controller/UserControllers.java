@@ -2,7 +2,7 @@ package africa.semicolon.controller;
 
 import africa.semicolon.dto.requests.*;
 import africa.semicolon.dto.responses.*;
-import africa.semicolon.exceptions.FinalBlogExceptions;
+import africa.semicolon.exceptions.NaijaGossipsExceptions;
 import africa.semicolon.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class UserControllers {
         try {
             UserRegisterResponse response = userServices.register(userRegisterRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), CREATED);
-        } catch(FinalBlogExceptions e){
+        } catch(NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
@@ -32,7 +32,7 @@ public class UserControllers {
         try {
             UserLoginResponse response = userServices.login(userLoginRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
-        } catch (FinalBlogExceptions e){
+        } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), FORBIDDEN);
         }
     }
@@ -42,7 +42,7 @@ public class UserControllers {
         try {
             CreatePostResponse response = userServices.createPost(createPostRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), CREATED);
-        } catch (FinalBlogExceptions e){
+        } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
@@ -52,7 +52,7 @@ public class UserControllers {
         try {
             DeletePostResponse response = userServices.deletePost(deletePostRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
-        }catch (FinalBlogExceptions e) {
+        }catch (NaijaGossipsExceptions e) {
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
@@ -62,7 +62,7 @@ public class UserControllers {
         try {
             UserLogoutResponse response = userServices.logout(userLogoutRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
-        } catch (FinalBlogExceptions e){
+        } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
@@ -72,7 +72,7 @@ public class UserControllers {
         try {
             UserPostsResponse response = userServices.getUserPosts(username);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
-        } catch (FinalBlogExceptions e){
+        } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
