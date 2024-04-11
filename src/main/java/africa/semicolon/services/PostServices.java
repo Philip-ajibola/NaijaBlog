@@ -12,7 +12,7 @@ public interface PostServices {
 
     void deletePost(Post post);
 
-    Post findPostByTitleAndPoster(String title,String poster);
+    Post findPostByTitleAndAuthor(String title, String poster);
 
     void addView(ViewPostRequest viewPostRequest);
 
