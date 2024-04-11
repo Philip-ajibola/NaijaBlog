@@ -7,7 +7,7 @@ import africa.semicolon.dto.requests.DeleteCommentRequest;
 public interface CommentServices {
     Comment saveComment(CommentPostRequest commentPostRequest);
 
-    long countNoOfViews();
+    long countNoOfComments();
 
     Comment findByComment(String comment);
 
