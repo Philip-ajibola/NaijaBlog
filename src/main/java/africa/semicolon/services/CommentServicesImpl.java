@@ -34,7 +34,7 @@ public class CommentServicesImpl implements CommentServices{
     }
 
     @Override
-    public long countNoOfViews() {
+    public long countNoOfComments() {
         return commentRepository.count();
     }
 
