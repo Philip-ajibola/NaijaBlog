@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class DeletePostRequest {
-    private String poster;
     private String postTitle;
     private String author;
 }
