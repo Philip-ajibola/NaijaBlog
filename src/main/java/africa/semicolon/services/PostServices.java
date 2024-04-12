@@ -1,6 +1,8 @@
 package africa.semicolon.services;
 
+import africa.semicolon.data.models.Comment;
 import africa.semicolon.data.models.Post;
+import africa.semicolon.data.models.View;
 import africa.semicolon.dto.requests.CommentPostRequest;
 import africa.semicolon.dto.requests.DeleteCommentRequest;
 import africa.semicolon.dto.requests.ViewPostRequest;
@@ -14,9 +16,9 @@ public interface PostServices {
 
     Post findPostByTitleAndAuthor(String title, String poster);
 
-    void addView(ViewPostRequest viewPostRequest);
+    View addView(ViewPostRequest viewPostRequest);
 
-    void addComment(CommentPostRequest commentPostRequest);
+    Comment addComment(CommentPostRequest commentPostRequest);
 
     void deleteComment(DeleteCommentRequest deleteCommentRequest);
 }
