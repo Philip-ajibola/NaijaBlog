@@ -46,21 +46,23 @@ public class PostServicesImpl implements PostServices {
     }
 
     @Override
-    public void addView(ViewPostRequest viewPostRequest) {
+    public View addView(ViewPostRequest viewPostRequest) {
         Post post = findPostByTitleAndAuthor(viewPostRequest.getPostTitle(), viewPostRequest.getPosterName());
         View view = viewServices.saveView(viewPostRequest);
         post.getViews().add(view);
         postRepository.save(post);
+        return view;
     }
 
     @Override
-    public void addComment(CommentPostRequest commentPostRequest) {
+    public Comment addComment(CommentPostRequest commentPostRequest) {
         Post post = findPostByTitleAndAuthor(commentPostRequest.getPostTitle(), commentPostRequest.getPoster());
         if(!checkIfPostIsViewedBy(commentPostRequest.getCommenter(), post)) viewPostIfNotViewed(commentPostRequest, post);
 
         Comment comment = commentServices.saveComment(commentPostRequest);
         post.getComments().add(comment);
         postRepository.save(post);
+        return comment;
     }
 
     private void viewPostIfNotViewed(CommentPostRequest commentPostRequest, Post post) {
