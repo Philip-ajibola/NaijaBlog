@@ -34,4 +34,9 @@ public class ViewServicesImpl implements ViewServices{
     public Long countNoOfViews() {
         return viewRepository.count();
     }
+
+    @Override
+    public void deleteView(View view) {
+        viewRepository.delete(view);
+    }
 }
