@@ -1,11 +1,14 @@
 package africa.semicolon.services;
 
+import africa.semicolon.data.models.Comment;
 import africa.semicolon.data.models.Post;
 import africa.semicolon.data.models.User;
+import africa.semicolon.data.models.View;
 import africa.semicolon.data.repositories.UserRepository;
 import africa.semicolon.dto.requests.*;
 import africa.semicolon.dto.responses.*;
 import africa.semicolon.exceptions.*;
+import africa.semicolon.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,45 +83,49 @@ public class UserServicesImpl implements UserServices{
     }
 
     @Override
-    public void viewPost(ViewPostRequest viewPostRequest) {
+    public ViewPostResponse viewPost(ViewPostRequest viewPostRequest) {
         validateLogin(findUserByName(viewPostRequest.getViewer()));
-        postServices.addView(viewPostRequest);
+        View view = postServices.addView(viewPostRequest);
+        return Mapper.responseMap(view);
     }
 
     @Override
-    public void comment(CommentPostRequest commentPostRequest) {
+    public AddCommentResponse comment(CommentPostRequest commentPostRequest) {
         validateLogin(findUserByName(commentPostRequest.getCommenter()));
-        postServices.addComment(commentPostRequest);
+        Comment comment = postServices.addComment(commentPostRequest);
+        return Mapper.responseMap(comment);
     }
 
     @Override
-    public void deleteComment(DeleteCommentRequest deleteCommentREquest) {
+    public String deleteComment(DeleteCommentRequest deleteCommentREquest) {
         validateLogin(findUserByName(deleteCommentREquest.getCommenter()));
         postServices.deleteComment(deleteCommentREquest);
+        return "Comment Deleted";
     }
 
     @Override
-    public void deleteUser(String username) {
+    public String deleteUser(String username) {
         User user = findUserByName(username);
         for(Post post :user.getPosts()) postServices.deletePost(post);
         userRepository.delete(user);
+        return "User Deleted";
     }
 
     @Override
-    public UserLoginResponse login(UserLoginRequest userLoginRequest) {
+    public String login(UserLoginRequest userLoginRequest) {
         User user = findUserByName(userLoginRequest.getUsername().toLowerCase());
         validatePassword(userLoginRequest);
         user.setLoggedIn(true);
         userRepository.save(user);
-        return loginResponseMap(user);
+        return "Login Successful";
     }
 
     @Override
-    public UserLogoutResponse logout(UserLogoutRequest userLogoutRequest) {
+    public String logout(UserLogoutRequest userLogoutRequest) {
         User user = findUserByName(userLogoutRequest.getUsername());
         user.setLoggedIn(false);
         userRepository.save(user);
-        return logoutResponseMap(user);
+        return "Log out successful";
     }
 
     private void validatePassword(UserLoginRequest userLoginRequest) {
