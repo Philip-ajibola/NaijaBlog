@@ -30,4 +30,5 @@ public interface UserServices {
     void comment(CommentPostRequest commentPostRequest);
 
     void deleteComment(DeleteCommentRequest deleteCommentREquest);
+    void deleteUser(String username);
 }
