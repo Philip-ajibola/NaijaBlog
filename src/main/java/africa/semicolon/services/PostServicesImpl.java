@@ -33,6 +33,8 @@ public class PostServicesImpl implements PostServices {
 
     @Override
     public void deletePost(Post post) {
+        for(View view : post.getViews()) viewServices.deleteView(view);
+        for(Comment comment : post.getComments()) commentServices.delete(comment);
         postRepository.delete(post);
     }
 
@@ -54,9 +56,32 @@ public class PostServicesImpl implements PostServices {
     @Override
     public void addComment(CommentPostRequest commentPostRequest) {
         Post post = findPostByTitleAndAuthor(commentPostRequest.getPostTitle(), commentPostRequest.getPoster());
+        if(!checkIfPostIsViewedBy(commentPostRequest.getCommenter(), post)) viewPostIfNotViewed(commentPostRequest, post);
+
         Comment comment = commentServices.saveComment(commentPostRequest);
         post.getComments().add(comment);
         postRepository.save(post);
+    }
+
+    private void viewPostIfNotViewed(CommentPostRequest commentPostRequest, Post post) {
+        ViewPostRequest viewPostRequest = new ViewPostRequest();
+        viewPostRequest.setPostTitle(post.getTitle());
+        viewPostRequest.setPosterName(post.getAuthor());
+        viewPostRequest.setViewer(commentPostRequest.getCommenter());
+        View view = viewServices.saveView(viewPostRequest);
+        post.getViews().add(view);
+        postRepository.save(post);
+    }
+
+    private static boolean checkIfPostIsViewedBy(String username, Post post) {
+        boolean condition = false;
+        for(View view : post.getViews()){
+            if(view.getViewer().getUsername().equals(username)) {
+                condition = true;
+                break;
+            }
+        }
+        return condition;
     }
 
     @Override
