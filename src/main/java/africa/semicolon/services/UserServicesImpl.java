@@ -98,6 +98,13 @@ public class UserServicesImpl implements UserServices{
     }
 
     @Override
+    public void deleteUser(String username) {
+        User user = findUserByName(username);
+        for(Post post :user.getPosts()) postServices.deletePost(post);
+        userRepository.delete(user);
+    }
+
+    @Override
     public UserLoginResponse login(UserLoginRequest userLoginRequest) {
         User user = findUserByName(userLoginRequest.getUsername().toLowerCase());
         validatePassword(userLoginRequest);
