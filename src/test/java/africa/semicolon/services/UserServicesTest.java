@@ -313,4 +313,48 @@ public class UserServicesTest {
         assertEquals(0,commentServices.countNoOfComments());
         assertEquals(0,viewServices.countNoOfViews());
     }
+    @Test
+    public void testThatUserCanBeDeleted(){
+        userServices.deleteUser(userRegisterRequest.getUsername());
+        assertEquals(0,userServices.countNoOfUsers());
+    }
+    @Test
+    public void testThatWhenUserIsDeletedUserPostIsDeleted(){
+        CreatePostRequest createPostRequest = new CreatePostRequest();
+        createPostRequest.setAuthor("username");
+        createPostRequest.setTitle("title");
+        createPostRequest.setContent("content");
+        userServices.createPost(createPostRequest);
+
+        UserRegisterRequest userRegisterRequest1 = new UserRegisterRequest();
+        userRegisterRequest1.setLastName("lastname");
+        userRegisterRequest1.setFirstName("firstname");
+        userRegisterRequest1.setPassword("password");
+        userRegisterRequest1.setUsername("username1");
+        userServices.register(userRegisterRequest1);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest();
+        userLoginRequest.setUsername("username1");
+        userLoginRequest.setPassword("password");
+        userServices.login(userLoginRequest);
+
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+        commentPostRequest.setComment("comment");
+        commentPostRequest.setCommenter("username1");
+        commentPostRequest.setPostTitle("title");
+        commentPostRequest.setPoster("username");
+        userServices.comment(commentPostRequest);
+
+        DeletePostRequest deletePostRequest = new DeletePostRequest();
+        deletePostRequest.setPostTitle("title");
+        deletePostRequest.setAuthor("username");
+        userServices.deleteUser("username");
+
+        assertEquals(1,userServices.countNoOfUsers());
+
+        assertEquals(0, postServices.countNoOfPosts());
+        assertEquals(0,commentServices.countNoOfComments());
+        assertEquals(0,viewServices.countNoOfViews());
+    }
+
 }
