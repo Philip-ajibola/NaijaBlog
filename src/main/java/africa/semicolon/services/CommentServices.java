@@ -12,4 +12,6 @@ public interface CommentServices {
     Comment findByComment(String comment);
 
     Comment removeComment(DeleteCommentRequest deleteCommentRequest);
+
+    void delete(Comment comment);
 }
