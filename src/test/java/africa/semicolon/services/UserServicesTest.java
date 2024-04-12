@@ -1,7 +1,9 @@
 package africa.semicolon.services;
 
+import africa.semicolon.data.repositories.CommentRepository;
 import africa.semicolon.data.repositories.PostRepository;
 import africa.semicolon.data.repositories.UserRepository;
+import africa.semicolon.data.repositories.ViewRepository;
 import africa.semicolon.dto.requests.*;
 import africa.semicolon.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +25,11 @@ public class UserServicesTest {
     @Autowired
     private ViewServices viewServices;
     @Autowired
+    private ViewRepository viewRepository;
+    @Autowired
     private CommentServices commentServices;
+    @Autowired
+    private CommentRepository commentRepository;
 
     private UserRegisterRequest userRegisterRequest;
     private UserLoginRequest userLoginRequest;
@@ -31,6 +37,8 @@ public class UserServicesTest {
     public void beforeEach(){
         userRepository.deleteAll();
         postRepository.deleteAll();
+        viewRepository.deleteAll();
+        commentRepository.deleteAll();
         userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("firstName");
         userRegisterRequest.setPassword("password");
