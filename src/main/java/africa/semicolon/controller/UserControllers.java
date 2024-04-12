@@ -20,7 +20,7 @@ public class UserControllers {
     @PostMapping("/sign_up")
     public ResponseEntity<?> register(@RequestBody UserRegisterRequest userRegisterRequest){
         try {
-            UserRegisterResponse response = userServices.register(userRegisterRequest);
+            var response = userServices.register(userRegisterRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), CREATED);
         } catch(NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
@@ -30,7 +30,7 @@ public class UserControllers {
     @PostMapping("/sign_in")
     public ResponseEntity<?> login(@RequestBody UserLoginRequest userLoginRequest){
         try {
-            UserLoginResponse response = userServices.login(userLoginRequest);
+            var response = userServices.login(userLoginRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
         } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), FORBIDDEN);
@@ -40,7 +40,7 @@ public class UserControllers {
     @PostMapping("/create_post")
     public ResponseEntity<?> createPost(@RequestBody CreatePostRequest createPostRequest){
         try {
-            CreatePostResponse response = userServices.createPost(createPostRequest);
+            var response = userServices.createPost(createPostRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), CREATED);
         } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
@@ -50,7 +50,7 @@ public class UserControllers {
     @PostMapping("/delete_post")
     public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest){
         try {
-            DeletePostResponse response = userServices.deletePost(deletePostRequest);
+            var response = userServices.deletePost(deletePostRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
         }catch (NaijaGossipsExceptions e) {
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
@@ -60,7 +60,7 @@ public class UserControllers {
     @PostMapping("/sign_out")
     public ResponseEntity<?> logout(@RequestBody UserLogoutRequest userLogoutRequest){
         try {
-            UserLogoutResponse response = userServices.logout(userLogoutRequest);
+            var response = userServices.logout(userLogoutRequest);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
         } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
@@ -70,7 +70,7 @@ public class UserControllers {
     @GetMapping("/all_posts/{username}")
     public ResponseEntity<?> viewAllPosts(@PathVariable String username){
         try {
-            UserPostsResponse response = userServices.getUserPosts(username);
+            var response = userServices.getUserPosts(username);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
         } catch (NaijaGossipsExceptions e){
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
