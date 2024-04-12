@@ -29,6 +29,21 @@ public class Mapper {
         return post;
     }
 
+    public static AddCommentResponse responseMap(Comment comment){
+        AddCommentResponse addCommentResponse = new AddCommentResponse();
+        addCommentResponse.setCommenterName(comment.getCommenter().getUsername());
+        addCommentResponse.setId(comment.getId());
+        addCommentResponse.setComment(comment.getComment());
+        return addCommentResponse;
+    }
+
+    public static ViewPostResponse responseMap(View view){
+        ViewPostResponse viewPostResponse = new ViewPostResponse();
+        viewPostResponse.setViewId(view.getId());
+        viewPostResponse.setViewersName(view.getViewer().getUsername());
+        return viewPostResponse;
+    }
+
     public static View requestMap(User user){
         View view = new View();
         view.setViewer(user);
@@ -50,19 +65,6 @@ public class Mapper {
         return response;
     }
 
-    public static UserLoginResponse loginResponseMap(User user){
-        UserLoginResponse response = new UserLoginResponse();
-        response.setUsername(user.getUsername());
-        response.setId(user.getId());
-        return response;
-    }
-
-    public static UserLogoutResponse logoutResponseMap(User user){
-        UserLogoutResponse response = new UserLogoutResponse();
-        response.setId(user.getId());
-        response.setUsername(user.getUsername());
-        return response;
-    }
 
     public static CreatePostResponse createPostResponseMap(Post post){
         CreatePostResponse createPostResponse = new CreatePostResponse();
