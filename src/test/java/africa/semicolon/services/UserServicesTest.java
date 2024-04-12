@@ -20,6 +20,11 @@ public class UserServicesTest {
     private PostRepository postRepository;
     @Autowired
     private PostServices postServices;
+    @Autowired
+    private ViewServices viewServices;
+    @Autowired
+    private CommentServices commentServices;
+
     private UserRegisterRequest userRegisterRequest;
     private UserLoginRequest userLoginRequest;
     @BeforeEach
@@ -207,6 +212,97 @@ public class UserServicesTest {
         deleteCommentRequest.setPostTitle("title");
         userServices.deleteComment(deleteCommentRequest);
         assertEquals(0, postServices.findPostByTitleAndAuthor("title","username").getComments().size());
+    }
+    @Test
+    public void testThatPostCanBeViewed(){
+        CreatePostRequest createPostRequest = new CreatePostRequest();
+        createPostRequest.setAuthor("username");
+        createPostRequest.setTitle("title");
+        createPostRequest.setContent("content");
+        userServices.createPost(createPostRequest);
 
+        UserRegisterRequest userRegisterRequest1 = new UserRegisterRequest();
+        userRegisterRequest1.setLastName("lastname");
+        userRegisterRequest1.setFirstName("firstname");
+        userRegisterRequest1.setPassword("password");
+        userRegisterRequest1.setUsername("username1");
+        userServices.register(userRegisterRequest1);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest();
+        userLoginRequest.setUsername("username1");
+        userLoginRequest.setPassword("password");
+        userServices.login(userLoginRequest);
+
+        ViewPostRequest viewPostRequest = new ViewPostRequest();
+        viewPostRequest.setPostTitle("title");
+        viewPostRequest.setPosterName("username");
+        viewPostRequest.setViewer("username1");
+        userServices.viewPost(viewPostRequest);
+        assertEquals(1,postServices.findPostByTitleAndAuthor("title","username").getViews().size());
+    }
+    @Test
+    public void testThatWhenUserCommentPostMustBeViewed(){
+        CreatePostRequest createPostRequest = new CreatePostRequest();
+        createPostRequest.setAuthor("username");
+        createPostRequest.setTitle("title");
+        createPostRequest.setContent("content");
+        userServices.createPost(createPostRequest);
+
+        UserRegisterRequest userRegisterRequest1 = new UserRegisterRequest();
+        userRegisterRequest1.setLastName("lastname");
+        userRegisterRequest1.setFirstName("firstname");
+        userRegisterRequest1.setPassword("password");
+        userRegisterRequest1.setUsername("username1");
+        userServices.register(userRegisterRequest1);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest();
+        userLoginRequest.setUsername("username1");
+        userLoginRequest.setPassword("password");
+        userServices.login(userLoginRequest);
+
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+        commentPostRequest.setComment("comment");
+        commentPostRequest.setCommenter("username1");
+        commentPostRequest.setPostTitle("title");
+        commentPostRequest.setPoster("username");
+        userServices.comment(commentPostRequest);
+        assertEquals(1, postServices.findPostByTitleAndAuthor("title","username").getComments().size());
+        assertEquals(1,postServices.findPostByTitleAndAuthor("title","username").getViews().size());
+    }
+    @Test
+    public void testThatWhenPostIsDeletedEverythingAboutThePostIsDeleted(){
+        CreatePostRequest createPostRequest = new CreatePostRequest();
+        createPostRequest.setAuthor("username");
+        createPostRequest.setTitle("title");
+        createPostRequest.setContent("content");
+        userServices.createPost(createPostRequest);
+
+        UserRegisterRequest userRegisterRequest1 = new UserRegisterRequest();
+        userRegisterRequest1.setLastName("lastname");
+        userRegisterRequest1.setFirstName("firstname");
+        userRegisterRequest1.setPassword("password");
+        userRegisterRequest1.setUsername("username1");
+        userServices.register(userRegisterRequest1);
+
+        UserLoginRequest userLoginRequest = new UserLoginRequest();
+        userLoginRequest.setUsername("username1");
+        userLoginRequest.setPassword("password");
+        userServices.login(userLoginRequest);
+
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+        commentPostRequest.setComment("comment");
+        commentPostRequest.setCommenter("username1");
+        commentPostRequest.setPostTitle("title");
+        commentPostRequest.setPoster("username");
+        userServices.comment(commentPostRequest);
+
+        DeletePostRequest deletePostRequest = new DeletePostRequest();
+        deletePostRequest.setPostTitle("title");
+        deletePostRequest.setAuthor("username");
+        userServices.deletePost(deletePostRequest);
+
+        assertEquals(0, postServices.countNoOfPosts());
+        assertEquals(0,commentServices.countNoOfComments());
+        assertEquals(0,viewServices.countNoOfViews());
     }
 }
