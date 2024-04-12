@@ -11,13 +11,13 @@ public interface UserServices {
 
     CreatePostResponse createPost(CreatePostRequest createPostRequest);
 
-    UserLoginResponse login(UserLoginRequest userLoginRequest);
+    String login(UserLoginRequest userLoginRequest);
 
     boolean isUserLoggedIn(String username);
 
     int getNoOfUserPosts(String username);
 
-    UserLogoutResponse logout(UserLogoutRequest userLogoutRequest);
+    String logout(UserLogoutRequest userLogoutRequest);
 
     User findUserByName(String username);
 
@@ -25,10 +25,10 @@ public interface UserServices {
 
     UserPostsResponse getUserPosts(String username);
 
-    void viewPost(ViewPostRequest viewPostRequest);
+    ViewPostResponse viewPost(ViewPostRequest viewPostRequest);
 
-    void comment(CommentPostRequest commentPostRequest);
+    AddCommentResponse comment(CommentPostRequest commentPostRequest);
 
-    void deleteComment(DeleteCommentRequest deleteCommentREquest);
-    void deleteUser(String username);
+    String deleteComment(DeleteCommentRequest deleteCommentREquest);
+    String deleteUser(String username);
 }
