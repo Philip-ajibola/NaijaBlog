@@ -7,4 +7,6 @@ public interface ViewServices {
     View saveView(ViewPostRequest viewPostRequest);
 
     Long countNoOfViews();
+
+    void deleteView(View view);
 }
