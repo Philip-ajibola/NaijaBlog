@@ -49,9 +49,10 @@ public class CommentServicesImpl implements CommentServices{
     public Comment removeComment(DeleteCommentRequest deleteCommentRequest) {
         User user = userRepository.findByUsername(deleteCommentRequest.getCommenter());
         if(user == null) throw new UserNotFoundException("User Can't Comment Cus User Does Not exist");
-        Comment comment = commentRepository.findByCommentAndCommenter(deleteCommentRequest.getComment(),user);
-        commentRepository.delete(comment);
-        return comment;
+        Optional<Comment> comment = commentRepository.findById(deleteCommentRequest.getId());
+        if(comment.isEmpty())throw new CommentNotFoundException("No Such Comment Found");
+        delete(comment.get());
+        return comment.get();
     }
 
     @Override

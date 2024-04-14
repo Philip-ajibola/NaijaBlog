@@ -1,5 +1,6 @@
 package africa.semicolon.services;
 
+import africa.semicolon.data.models.Comment;
 import africa.semicolon.data.repositories.CommentRepository;
 import africa.semicolon.data.repositories.PostRepository;
 import africa.semicolon.data.repositories.UserRepository;
@@ -214,7 +215,7 @@ public class UserServicesTest {
         assertEquals(1, postServices.findPostByTitleAndAuthor("title","username").getComments().size());
 
         DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest();
-        deleteCommentRequest.setComment("comment");
+        deleteCommentRequest.setId(commentServices.findByComment("comment").getId());
         deleteCommentRequest.setCommenter("username1");
         deleteCommentRequest.setPoster("username");
         deleteCommentRequest.setPostTitle("title");

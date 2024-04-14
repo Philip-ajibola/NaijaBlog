@@ -76,4 +76,40 @@ public class UserControllers {
             return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
+    @PostMapping("/comment")
+    public ResponseEntity<?> comment(@RequestBody CommentPostRequest commentPostRequest){
+        try {
+            var response = userServices.comment(commentPostRequest);
+            return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
+        } catch (NaijaGossipsExceptions e){
+            return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/delete_comment")
+    public ResponseEntity<?> deleteComment(@RequestBody DeleteCommentRequest deleteCommentRequest){
+        try {
+            var response = userServices.deleteComment(deleteCommentRequest);
+            return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
+        } catch (NaijaGossipsExceptions e){
+            return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+    }
+    @PostMapping("/view_post")
+    public ResponseEntity<?> viewPost(@RequestBody ViewPostRequest viewPostRequest){
+        try {
+            var response = userServices.viewPost(viewPostRequest);
+            return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
+        } catch (NaijaGossipsExceptions e){
+            return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/delete_user/{username}")
+    public ResponseEntity<?> deleteUserAccount(@PathVariable("username") String username){
+        try {
+            var response = userServices.deleteUser(username);
+            return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);
+        } catch (NaijaGossipsExceptions e){
+            return new ResponseEntity<>(new UserApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+    }
 }
