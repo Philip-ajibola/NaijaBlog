@@ -64,7 +64,7 @@ public class UserServicesImpl implements UserServices{
     }
 
     @Override
-        public DeletePostResponse deletePost(DeletePostRequest deletePostRequest) {
+        public String deletePost(DeletePostRequest deletePostRequest) {
             User foundUser = findUserByName(deletePostRequest.getAuthor().toLowerCase());
             validateLogin(foundUser);
             Post post = postServices.findPostByTitleAndAuthor(deletePostRequest.getPostTitle(),deletePostRequest.getAuthor());
@@ -72,7 +72,7 @@ public class UserServicesImpl implements UserServices{
             postServices.deletePost(post);
             foundUser.getPosts().remove(post);
             userRepository.save(foundUser);
-            return deletePostResponseMap(post);
+            return "Post Deleted";
         }
 
     @Override

@@ -21,7 +21,7 @@ public interface UserServices {
 
     User findUserByName(String username);
 
-    DeletePostResponse deletePost(DeletePostRequest deletePostRequest);
+    String deletePost(DeletePostRequest deletePostRequest);
 
     UserPostsResponse getUserPosts(String username);
 

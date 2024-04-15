@@ -47,7 +47,7 @@ public class UserControllers {
         }
     }
 
-    @PostMapping("/delete_post")
+    @DeleteMapping("/delete_post")
     public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest){
         try {
             var response = userServices.deletePost(deletePostRequest);

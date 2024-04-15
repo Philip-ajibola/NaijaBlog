@@ -83,13 +83,6 @@ public class Mapper {
         return createPostResponse;
     }
 
-    public static DeletePostResponse deletePostResponseMap(Post post){
-        DeletePostResponse deletePostResponse = new DeletePostResponse();
-        deletePostResponse.setPostId(post.getId());
-        deletePostResponse.setPostTitle(post.getTitle());
-        return deletePostResponse;
-    }
-
     public static UserPostsResponse allPostResponseMap(User user, List<Post> posts){
         UserPostsResponse userPostsResponse = new UserPostsResponse();
         userPostsResponse.setUsername(user.getUsername());
