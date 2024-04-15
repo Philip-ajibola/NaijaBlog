@@ -2,6 +2,7 @@ package africa.semicolon.services;
 
 import africa.semicolon.data.models.Comment;
 import africa.semicolon.data.models.Post;
+import africa.semicolon.data.models.User;
 import africa.semicolon.data.models.View;
 import africa.semicolon.dto.requests.CommentPostRequest;
 import africa.semicolon.dto.requests.DeleteCommentRequest;

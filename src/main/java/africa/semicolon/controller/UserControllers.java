@@ -68,7 +68,7 @@ public class UserControllers {
     }
 
     @GetMapping("/all_posts/{username}")
-    public ResponseEntity<?> viewAllPosts(@PathVariable String username){
+    public ResponseEntity<?> viewAllPosts(@PathVariable("username") String username){
         try {
             var response = userServices.getUserPosts(username);
             return new ResponseEntity<>(new UserApiResponse(true, response), ACCEPTED);

@@ -27,7 +27,7 @@ public class UserServicesImpl implements UserServices{
 
     @Override
     public UserRegisterResponse register(UserRegisterRequest userRegisterRequest) {
-        validateUsername(userRegisterRequest.getUsername());
+        validateUsername(userRegisterRequest.getUsername().toLowerCase());
 
         User newUser = requestMap(userRegisterRequest);
         userRepository.save(newUser);
@@ -44,7 +44,7 @@ public class UserServicesImpl implements UserServices{
     @Override
         public CreatePostResponse createPost(CreatePostRequest createPostRequest) {
             validateRequest(createPostRequest);
-            User foundUser = findUserByName(createPostRequest.getAuthor());
+            User foundUser = findUserByName(createPostRequest.getAuthor().toLowerCase());
             validateLogin(foundUser);
             Post post = requestMap(createPostRequest);
             postServices.addPost(post);
@@ -65,9 +65,10 @@ public class UserServicesImpl implements UserServices{
 
     @Override
         public DeletePostResponse deletePost(DeletePostRequest deletePostRequest) {
-            User foundUser = findUserByName(deletePostRequest.getAuthor());
+            User foundUser = findUserByName(deletePostRequest.getAuthor().toLowerCase());
             validateLogin(foundUser);
             Post post = postServices.findPostByTitleAndAuthor(deletePostRequest.getPostTitle(),deletePostRequest.getAuthor());
+            if(post == null) throw new PostNotFoundException("Post not Found");
             postServices.deletePost(post);
             foundUser.getPosts().remove(post);
             userRepository.save(foundUser);
@@ -76,7 +77,7 @@ public class UserServicesImpl implements UserServices{
 
     @Override
     public UserPostsResponse getUserPosts(String username) {
-        User user = findUserByName(username);
+        User user = findUserByName(username.toLowerCase());
         validateLogin(user);
         List<Post> posts = user.getPosts();
         return allPostResponseMap(user, posts);
@@ -84,28 +85,28 @@ public class UserServicesImpl implements UserServices{
 
     @Override
     public ViewPostResponse viewPost(ViewPostRequest viewPostRequest) {
-        validateLogin(findUserByName(viewPostRequest.getViewer()));
+        validateLogin(findUserByName(viewPostRequest.getViewer().toLowerCase()));
         View view = postServices.addView(viewPostRequest);
         return Mapper.responseMap(view);
     }
 
     @Override
     public AddCommentResponse comment(CommentPostRequest commentPostRequest) {
-        validateLogin(findUserByName(commentPostRequest.getCommenter()));
+        validateLogin(findUserByName(commentPostRequest.getCommenter().toLowerCase()));
         Comment comment = postServices.addComment(commentPostRequest);
         return Mapper.responseMap(comment);
     }
 
     @Override
     public String deleteComment(DeleteCommentRequest deleteCommentREquest) {
-        validateLogin(findUserByName(deleteCommentREquest.getCommenter()));
+        validateLogin(findUserByName(deleteCommentREquest.getCommenter().toLowerCase()));
         postServices.deleteComment(deleteCommentREquest);
         return "Comment Deleted";
     }
 
     @Override
     public String deleteUser(String username) {
-        User user = findUserByName(username);
+        User user = findUserByName(username.toLowerCase());
         for(Post post :user.getPosts()) postServices.deletePost(post);
         userRepository.delete(user);
         return "User Deleted";
@@ -122,14 +123,14 @@ public class UserServicesImpl implements UserServices{
 
     @Override
     public String logout(UserLogoutRequest userLogoutRequest) {
-        User user = findUserByName(userLogoutRequest.getUsername());
+        User user = findUserByName(userLogoutRequest.getUsername().toLowerCase());
         user.setLoggedIn(false);
         userRepository.save(user);
         return "Log out successful";
     }
 
     private void validatePassword(UserLoginRequest userLoginRequest) {
-        User user = findUserByName(userLoginRequest.getUsername());
+        User user = findUserByName(userLoginRequest.getUsername().toLowerCase());
         if(!user.getPassword().equals(userLoginRequest.getPassword())) throw new InvalidPasswordException("Wrong password");
     }
 

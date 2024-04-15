@@ -10,6 +10,8 @@ import africa.semicolon.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static africa.semicolon.utils.Mapper.requestMap;
 
 @Service
@@ -38,5 +40,10 @@ public class ViewServicesImpl implements ViewServices{
     @Override
     public void deleteView(View view) {
         viewRepository.delete(view);
+    }
+
+    @Override
+    public List<View> findAll() {
+        return viewRepository.findAll();
     }
 }

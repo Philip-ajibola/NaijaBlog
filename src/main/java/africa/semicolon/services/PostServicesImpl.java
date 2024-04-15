@@ -2,12 +2,14 @@ package africa.semicolon.services;
 
 import africa.semicolon.data.models.Comment;
 import africa.semicolon.data.models.Post;
+import africa.semicolon.data.models.User;
 import africa.semicolon.data.models.View;
 import africa.semicolon.data.repositories.PostRepository;
 import africa.semicolon.dto.requests.CommentPostRequest;
 import africa.semicolon.dto.requests.DeleteCommentRequest;
 import africa.semicolon.dto.requests.ViewPostRequest;
 import africa.semicolon.exceptions.PostNotFoundException;
+import africa.semicolon.exceptions.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,19 +42,25 @@ public class PostServicesImpl implements PostServices {
 
     @Override
     public Post findPostByTitleAndAuthor(String title, String username) {
-        Post post = postRepository.findByTitleAndAuthor(title, username);
-        if (post == null) throw new PostNotFoundException("Post not found");
-        return post;
+        Post expectedPost = null;
+        for(Post post : postRepository.findAll()){
+            if(post.getAuthor().equalsIgnoreCase(username)){
+                if(normalizeString(title).equalsIgnoreCase(normalizeString(post.getTitle())))expectedPost = post;
+            }
+        }
+        return expectedPost;
     }
 
     @Override
     public View addView(ViewPostRequest viewPostRequest) {
         Post post = findPostByTitleAndAuthor(viewPostRequest.getPostTitle(), viewPostRequest.getPosterName());
-        View view = viewServices.saveView(viewPostRequest);
-        post.getViews().add(view);
+        if(post == null) throw new PostNotFoundException("Post not found");
+        View view1 = viewServices.saveView(viewPostRequest);
+        post.getViews().add(view1);
         postRepository.save(post);
-        return view;
+        return view1;
     }
+
 
     @Override
     public Comment addComment(CommentPostRequest commentPostRequest) {
@@ -93,5 +101,18 @@ public class PostServicesImpl implements PostServices {
         post.getComments().remove(comment);
         postRepository.save(post);
     }
+    private Post findPost(String postTitle,String username){
+        Post expectedPost = null;
+        for(Post post : postRepository.findAll()){
+            if(post.getAuthor().equals(username)){
+                if(normalizeString(postTitle).equalsIgnoreCase(normalizeString(post.getTitle())))expectedPost = post;
+            }
+        }
+        return expectedPost;
+    }
+    private static String normalizeString(String str) {
+        return str.replaceAll("\\s+", "");
+    }
+
 
 }

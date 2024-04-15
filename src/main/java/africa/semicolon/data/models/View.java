@@ -10,9 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @Document("Views")
 public class View {
-    @DBRef
-    private User viewer;
+
     @Id
     private String id;
+    @DBRef
+    private User viewer;
     private LocalDateTime timeOfView = LocalDateTime.now();
 }

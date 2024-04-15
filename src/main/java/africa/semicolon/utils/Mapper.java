@@ -6,6 +6,8 @@ import africa.semicolon.data.models.User;
 import africa.semicolon.data.models.View;
 import africa.semicolon.dto.requests.*;
 import africa.semicolon.dto.responses.*;
+import africa.semicolon.exceptions.InValidUserNameException;
+import africa.semicolon.exceptions.InvalidPasswordException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 public class Mapper {
 
     public static User requestMap(UserRegisterRequest userRegisterRequest){
+        validateRequest(userRegisterRequest);
         User user = new User();
         user.setUsername(userRegisterRequest.getUsername().toLowerCase());
         user.setPassword(userRegisterRequest.getPassword());
@@ -21,6 +24,12 @@ public class Mapper {
         return user;
     }
 
+    public static void validateRequest(UserRegisterRequest request) {
+        if(!request.getUsername().matches("[a-zA-Z0-9]+"))throw new InValidUserNameException("Username Can Only Contain Alphabet And Number and not null");
+        if(request.getFirstName() == null ||request.getFirstName().isEmpty() || !request.getFirstName().matches("[a-zA-z]+"))throw new InValidUserNameException("FirstName Should Consist of Alphabet Only and Should not be null");
+        if(request.getLastName() == null ||request.getLastName().isEmpty() || !request.getLastName().matches("[a-zA-z]+"))throw new InValidUserNameException("LastName Should Consist of Alphabet Only and Should not be null");
+        if(request.getPassword().trim().isEmpty())throw new InvalidPasswordException("Provide A Valid Password");
+    }
     public static Post requestMap(CreatePostRequest createPostRequest){
         Post post = new Post();
         post.setTitle(createPostRequest.getTitle());
